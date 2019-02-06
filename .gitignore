@@ -82,3 +82,6 @@ xcuserdata/
 *.pdb
 *.exp
 *.manifest
+
+# Static libraries
+*.a

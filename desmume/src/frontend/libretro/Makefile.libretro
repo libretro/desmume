@@ -209,18 +209,19 @@ else ifeq ($(platform), sncps3)
 
 # Nintendo Switch (libnx)
 else ifeq ($(platform), libnx)
-    include $(DEVKITPRO)/libnx/switch_rules
-    EXT=a
-	 HAVE_LIBFAT=0
-    TARGET := $(TARGET_NAME)_libretro_$(platform).$(EXT)
-    DEFINES := -DSWITCH=1 -U__linux__ -U__linux -DRARCH_INTERNAL -DIOAPI_NO_64
-    CFLAGS	:=	 $(DEFINES) -g -O3 \
-                 -fPIE -I$(LIBNX)/include/ -ffunction-sections -fdata-sections -ftls-model=local-exec -Wl,--allow-multiple-definition -specs=$(LIBNX)/switch.specs
-    CFLAGS += $(INCDIRS)
-    CFLAGS	+=	-D__SWITCH__ -DHAVE_LIBNX -march=armv8-a -mtune=cortex-a57 -mtp=soft
-    CXXFLAGS := $(ASFLAGS) $(CFLAGS) -fno-rtti -std=gnu++11
-    CFLAGS += -std=gnu11
-    STATIC_LINKING = 1
+	include $(DEVKITPRO)/libnx/switch_rules
+	EXT=a
+	HAVE_LIBFAT=1
+	TARGET := $(TARGET_NAME)_libretro_$(platform).$(EXT)
+	DEFINES_THREAD := -Dpthread_t=Thread -Dpthread_mutex_t=Mutex -Dpthread_mutexattr_t='void*' -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t='int' -D_SYS__PTHREADTYPES_H_
+	DEFINES := -DSWITCH=1 -U__linux__ -U__linux -DRARCH_INTERNAL -DIOAPI_NO_64 -D__SWITCH__=1 -DSWITCH $(DEFINES_THREAD)
+	CFLAGS	:=	 $(DEFINES) -g -O3 -ffast-math -funsafe-math-optimizations \
+					-fPIE -I$(DEVKITPRO)/libnx/include/ -I$(PORTLIBS)/include/ -include $(LIBNX)/include/switch.h -ffunction-sections -fdata-sections -ftls-model=local-exec -Wl,--allow-multiple-definition -specs=$(DEVKITPRO)/libnx/switch.specs
+	CFLAGS += $(INCDIRS)
+	CFLAGS	+= -D__SWITCH__ -DHAVE_LIBNX -march=armv8-a -mtune=cortex-a57 -mtp=soft -mcpu=cortex-a57+crc+fp+simd -lpthread
+	CXXFLAGS := $(ASFLAGS) $(CFLAGS) -std=gnu++11
+	CFLAGS += -std=gnu11
+	STATIC_LINKING = 1
 
 # Lightweight PS3 Homebrew SDK
 else ifeq ($(platform), psl1ght)
