@@ -4501,8 +4501,7 @@ int WifiHandler::GetBridgeDeviceList(std::vector<std::string> *deviceStringList)
 
 #if defined(HAVE_LIBNX)
 	return result;
-#elif
-
+#else
 	char errbuf[PCAP_ERRBUF_SIZE];
 	pcap_if_t *deviceList;
 	
