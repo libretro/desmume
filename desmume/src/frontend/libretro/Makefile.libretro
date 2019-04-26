@@ -213,8 +213,7 @@ else ifeq ($(platform), libnx)
 	EXT=a
 	HAVE_LIBFAT=1
 	TARGET := $(TARGET_NAME)_libretro_$(platform).$(EXT)
-	DEFINES_THREAD := -Dpthread_t=Thread -Dpthread_mutex_t=Mutex -Dpthread_mutexattr_t='void*' -Dpthread_attr_t=int -Dpthread_cond_t=CondVar -Dpthread_condattr_t='int' -D_SYS__PTHREADTYPES_H_
-	DEFINES := -DSWITCH=1 -U__linux__ -U__linux -DRARCH_INTERNAL -DIOAPI_NO_64 -D__SWITCH__=1 -DSWITCH $(DEFINES_THREAD)
+	DEFINES := -DSWITCH=1 -U__linux__ -U__linux -DRARCH_INTERNAL -DIOAPI_NO_64 -D__SWITCH__=1 -DSWITCH
 	CFLAGS	:=	 $(DEFINES) -g -O3 -ffast-math -funsafe-math-optimizations \
 					-fPIE -I$(DEVKITPRO)/libnx/include/ -I$(PORTLIBS)/include/ -include $(LIBNX)/include/switch.h -ffunction-sections -fdata-sections -ftls-model=local-exec -Wl,--allow-multiple-definition -specs=$(DEVKITPRO)/libnx/switch.specs
 	CFLAGS += $(INCDIRS)
