@@ -69,7 +69,7 @@
 
 #if defined(_WIN32) && defined(__LIBRETRO__)
 #include "frontend/windows/winpcap/pcap.h"
-#elif defined(HAVE_LIBNX) || defined(__IOS__)
+#elif defined(HAVE_LIBNX) || defined(__IOS__) || defined(ANDROID)
 typedef void* pcap_pkthdr;
 #else
 #include <pcap.h>
@@ -3098,7 +3098,7 @@ static const u8 SoftAP_DeauthFrame[] = {
 
 static void SoftAP_RXPacketGet_Callback(u_char *userData, const pcap_pkthdr *pktHeader, const u_char *pktData)
 {
-#if defined(HAVE_LIBNX) || defined(__IOS__)
+#if defined(HAVE_LIBNX) || defined(__IOS__) || defined(ANDROID)
 	return;
 #else
 	const WIFI_IOREG_MAP &io = wifiHandler->GetWifiData().io;
@@ -3558,7 +3558,7 @@ void* SoftAPCommInterface::_GetBridgeDeviceAtIndex(int deviceIndex, char *outErr
 	void *deviceList = NULL;
 	void *theDevice = NULL;
 
-#if defined(HAVE_LIBNX) || defined(__IOS__)
+#if defined(HAVE_LIBNX) || defined(__IOS__) || defined(ANDROID)
 	return theDevice;
 #else
 	int result = this->_pcap->findalldevs((void **)&deviceList, outErrorBuf);
@@ -4499,7 +4499,7 @@ int WifiHandler::GetBridgeDeviceList(std::vector<std::string> *deviceStringList)
 		return result;
 	}
 
-#if defined(HAVE_LIBNX) || defined(__IOS__)
+#if defined(HAVE_LIBNX) || defined(__IOS__) || defined(ANDROID)
 	return result;
 #else
 	char errbuf[PCAP_ERRBUF_SIZE];
