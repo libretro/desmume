@@ -18,7 +18,7 @@ endif
 
 include $(LIBRETRO_DIR)/Makefile.common
 
-COREFLAGS := -D__LIBRETRO__ -DANDROID $(INCDIR) $(JIT)
+COREFLAGS := -D__LIBRETRO__ -DANDROID $(INCDIR) $(JIT) -Wno-c++11-narrowing
 
 GIT_VERSION := " $(shell git rev-parse --short HEAD || echo unknown)"
 ifneq ($(GIT_VERSION)," unknown")
