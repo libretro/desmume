@@ -461,8 +461,8 @@ CXXFLAGS += -DWIN32
 # Windows
 else
    TARGET := $(TARGET_NAME)_libretro.dll
-   CC = gcc
-   CXX = g++
+   CC ?= gcc
+   CXX ?= g++
    CFLAGS += -DHAVE_OPENGL -fno-strict-aliasing
    CXXFLAGS += -DHAVE_OPENGL -fno-strict-aliasing
    LIBS += -lopengl32
