@@ -32,8 +32,6 @@ static GLuint tex = 0;
 static GLuint current_texture_width = 0;
 static GLuint current_texture_height = 0;
 
-static bool libretro_supports_bitmasks = false;
-
 typedef void (glBindFramebufferProc) (GLenum, GLuint);
 static glBindFramebufferProc *glBindFramebuffer = NULL;
 typedef void (glGenFramebuffersProc) (GLsizei, GLuint *);
@@ -76,6 +74,8 @@ static retro_input_state_t input_cb = NULL;
 retro_audio_sample_batch_t audio_batch_cb = NULL;
 retro_environment_t environ_cb = NULL;
 static struct retro_hw_render_callback hw_render;
+
+static bool libretro_supports_bitmasks = false;
 
 volatile bool execute = 0;
 
