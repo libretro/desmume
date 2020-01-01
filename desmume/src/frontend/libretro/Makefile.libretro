@@ -136,7 +136,8 @@ else ifeq ($(platform), osx)
       CXXFLAGS += $(ARCHFLAGS)
       LDFLAGS += $(ARCHFLAGS)
    endif
-	DESMUME_OPENGL = 1
+   DESMUME_OPENGL = 1
+	DESMUME_OPENGL_CORE = 1
 
 # iOS
 else ifneq (,$(findstring ios,$(platform)))
