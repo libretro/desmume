@@ -2369,19 +2369,7 @@ bool retro_unserialize(const void * data, size_t size)
     return savestate_load(state);
 }
 
-bool init_gl_context(unsigned preferred)
-{
-   hw_render.context_type = (retro_hw_context_type)preferred;
-   hw_render.cache_context = false;
-   hw_render.context_reset = context_reset;
-   hw_render.context_destroy = context_destroy;
-   hw_render.bottom_left_origin = false;
-   hw_render.depth = true;
 
-   if (!environ_cb(RETRO_ENVIRONMENT_SET_HW_RENDER, &hw_render))
-      return false;
-   return true;
-}
 
 bool retro_load_game(const struct retro_game_info *game)
 {
@@ -2396,34 +2384,18 @@ bool retro_load_game(const struct retro_game_info *game)
           log_cb(RETRO_LOG_WARN, "Couldn't set shared context. Some things may break.\n");
        }
 
-       // get current video driver
-       unsigned preferred;
-       if (!environ_cb(RETRO_ENVIRONMENT_GET_PREFERRED_HW_RENDER, &preferred))
-          preferred = RETRO_HW_CONTEXT_DUMMY;
-       bool found_gl_context = false;
-       if (preferred == RETRO_HW_CONTEXT_OPENGL || preferred == RETRO_HW_CONTEXT_OPENGL_CORE)
-       {
-          // try requesting the right context for current driver
-          found_gl_context = init_gl_context(preferred);
-       }
-       else if (preferred == RETRO_HW_CONTEXT_VULKAN)
-       {
-          // if vulkan is the current driver, we probably prefer glcore over gl so that the same slang shaders can be used
-          found_gl_context = init_gl_context(RETRO_HW_CONTEXT_OPENGL_CORE);
-       }
-       else
-       {
-          // try every context as fallback if current driver wasn't found
-          found_gl_context = init_gl_context(RETRO_HW_CONTEXT_OPENGL_CORE);
-          if (!found_gl_context)
-             found_gl_context = init_gl_context(RETRO_HW_CONTEXT_OPENGL);
-       }
+       hw_render.context_type = RETRO_HW_CONTEXT_OPENGL;
+       hw_render.cache_context = false;
+       hw_render.context_reset = context_reset;
+       hw_render.context_destroy = context_destroy;
+       hw_render.bottom_left_origin = false;
+       hw_render.depth = true;
 
        oglrender_init        = dummy_retro_gl_init;
        oglrender_beginOpenGL = dummy_retro_gl_begin;
        oglrender_endOpenGL   = dummy_retro_gl_end;
 
-       if (!found_gl_context)
+       if (!environ_cb(RETRO_ENVIRONMENT_SET_HW_RENDER, &hw_render))
        {
            log_cb(RETRO_LOG_ERROR, "Couldn't create rendering context. Using software rasterizer.\n");
            opengl_mode = false;
