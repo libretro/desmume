@@ -72,7 +72,7 @@
 #elif defined(HAVE_LIBNX) || defined(__IOS__) || defined(ANDROID) || defined(GEKKO) || defined(_3DS)
 typedef void* pcap_pkthdr;
 #else
-#include <pcap.h>
+#include <pcap/pcap.h>
 #endif
 typedef struct pcap pcap_t;
 
