@@ -128,7 +128,11 @@ else ifeq ($(platform), osx)
    fpic := -fPIC
    SHARED := -dynamiclib -framework OpenGL
    DESMUME_JIT = 1
+ifeq ($(OSX_LT_MAVERICKS),"YES")
    fpic += -mmacosx-version-min=10.2
+else
+	fpic += -mmacosx-version-min=10.7 -stdlib=libc++
+endif
    CFLAGS += -DAPPLE_ATOMICS
    CXXFLAGS += -DAPPLE_ATOMICS
    ifndef ($(NOUNIVERSAL))
