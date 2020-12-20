@@ -26,7 +26,7 @@
 #include <ctype.h>
 #include <errno.h>
 
-#if !defined(_WIN32) && !defined(__CELLOS_LV2__) && !defined(_XBOX)
+#if !defined(_WIN32) && !defined(_XBOX)
 #include <sys/param.h> /* PATH_MAX */
 #elif defined(_WIN32) && !defined(_XBOX)
 #define WIN32_LEAN_AND_MEAN
@@ -299,7 +299,6 @@ static void add_sub_conf(config_file_t *conf, char *path)
       fill_pathname_resolve_relative(real_path, conf->path,
             path, sizeof(real_path));
 #else
-#ifndef __CELLOS_LV2__
    if (*path == '~')
    {
       const char *home = getenv("HOME");
@@ -307,7 +306,6 @@ static void add_sub_conf(config_file_t *conf, char *path)
       strlcat(real_path, path + 1, sizeof(real_path));
    }
    else
-#endif
       if (!string_is_empty(conf->path))
          fill_pathname_resolve_relative(real_path, conf->path,
                path, sizeof(real_path));
