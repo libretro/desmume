@@ -45,11 +45,6 @@ include:
   - project: 'libretro-infrastructure/ci-templates'
     file: '/libnx-static.yml'
 
-  #################################### MISC ##################################
-  # Emscripten
-  - project: 'libretro-infrastructure/ci-templates'
-    file: '/emscripten-static.yml'
-
 # Stages for building
 stages:
   - build-prepare
@@ -121,11 +116,4 @@ libretro-build-ios-9:
 libretro-build-libnx-aarch64:
   extends:
     - .libretro-libnx-static-retroarch-master
-    - .core-defs
-
-#################################### MISC ##################################
-# Emscripten
-libretro-build-emscripten:
-  extends:
-    - .libretro-emscripten-static-retroarch-master
     - .core-defs
