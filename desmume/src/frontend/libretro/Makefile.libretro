@@ -48,10 +48,15 @@ ifneq (,$(findstring unix,$(platform)))
    TARGET := $(TARGET_NAME)_libretro.so
    fpic := -fPIC
    SHARED := -shared -Wl,--no-undefined -Wl,--version-script=$(CORE_DIR)/frontend/libretro/link.T
-   LIBS := -lpthread -lGL -lpcap
-   CXXFLAGS += -DHAVE_OPENGL -std=gnu++11
-   DESMUME_OPENGL = 1
+   ifneq ($(findstring Haiku,$(shell uname -s)),)
+      LIBS := -lroot -lnetwork -lpcap
+      DESMUME_OPENGL = 0
+   else
+      LIBS := -lpthread -lGL -lpcap
+      CXXFLAGS += -DHAVE_OPENGL -std=gnu++11
+      DESMUME_OPENGL = 1
 	DESMUME_OPENGL_CORE = 1
+   endif
 
    ifneq (,$(findstring clang,$(platform)))
       CC = clang

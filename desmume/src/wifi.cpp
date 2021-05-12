@@ -59,7 +59,7 @@
 
 // Some platforms need HAVE_REMOTE to work with libpcap, but
 // Apple platforms are not among them.
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(__HAIKU__)
 	#define HAVE_REMOTE
 #endif
 
