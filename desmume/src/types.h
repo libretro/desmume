@@ -224,10 +224,12 @@ typedef signed long long s64;
 typedef u8  uint8;
 typedef u16 uint16;
 
+#ifndef __HAIKU__
 #ifndef OBJ_C
 typedef u32 uint32;
 #else
 #define uint32 u32 //uint32 is defined in Leopard somewhere, avoid conflicts
+#endif
 #endif
 
 #ifdef ENABLE_ALTIVEC
