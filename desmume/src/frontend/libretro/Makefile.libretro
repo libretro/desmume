@@ -51,6 +51,10 @@ ifneq (,$(findstring unix,$(platform)))
    ifneq ($(findstring Haiku,$(shell uname -s)),)
       LIBS := -lroot -lnetwork -lpcap
       DESMUME_OPENGL = 0
+      ifneq ($(findstring BePC,$(shell uname -m)),)
+         CC = gcc-x86
+         CXX = g++-x86
+      endif
    else
       LIBS := -lpthread -lGL -lpcap
       CXXFLAGS += -DHAVE_OPENGL -std=gnu++11
