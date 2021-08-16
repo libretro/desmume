@@ -696,34 +696,13 @@ void retro_get_system_av_info(struct retro_system_av_info *info)
    struct LayoutData layout;
    update_layout_params(current_layout, &layout);
 
-   switch (current_layout)
-   {
-          case LAYOUT_TOP_BOTTOM:
-          case LAYOUT_BOTTOM_TOP:
-		  info->geometry.base_width   = 256;
-		  info->geometry.base_height  = 384;
-		  break;
-          case LAYOUT_LEFT_RIGHT:
-          case LAYOUT_RIGHT_LEFT:
-		  info->geometry.base_width   = 512;
-		  info->geometry.base_height  = 192;
-		  break;
-	  case LAYOUT_TOP_ONLY:
-	  case LAYOUT_BOTTOM_ONLY:
-		  info->geometry.base_width   = 256;
-		  info->geometry.base_height  = 192;
-		  break;
-	  case LAYOUT_HYBRID_TOP_ONLY:
-	  case LAYOUT_HYBRID_BOTTOM_ONLY:
-		  info->geometry.base_width   = 341;
-		  info->geometry.base_height  = 192;
-		  break;
-   }
+   info->geometry.base_width   = layout.width;
+   info->geometry.base_height  = layout.height;
    info->geometry.max_width    = layout.width;
    info->geometry.max_height   = layout.height;
    info->geometry.aspect_ratio = 0.0;
-   info->timing.fps            = 59.8261;
-   info->timing.sample_rate    = 44100.0;
+   info->timing.fps = 59.8261;
+   info->timing.sample_rate = 44100.0;
 }
 
 
