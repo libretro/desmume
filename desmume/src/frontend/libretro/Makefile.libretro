@@ -136,7 +136,13 @@ else ifeq ($(platform), osx)
    TARGET := $(TARGET_NAME)_libretro.dylib
    fpic := -fPIC
    SHARED := -dynamiclib -framework OpenGL
-   DESMUME_JIT = 1
+ifeq ($(CROSS_COMPILE),1)
+   ARCHFLAGS   = -arch $(ARCH) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
+else
+   ifneq ($(shell uname -m),arm64)
+      DESMUME_JIT = 1
+   endif
+endif
 ifeq ($(OSX_LT_MAVERICKS),"YES")
    fpic += -mmacosx-version-min=10.2
 else
