@@ -15,20 +15,39 @@ ifneq ($(SANITIZER),)
 endif
 
 ifeq ($(platform),)
-   platform = unix
-   ifeq ($(shell uname -a),)
-      platform = win
-   else ifneq ($(findstring MINGW,$(shell uname -a)),)
-      platform = win
-   else ifneq ($(findstring Darwin,$(shell uname -a)),)
-      platform = osx
-   else ifneq ($(findstring win,$(shell uname -a)),)
-      platform = win
-   endif
-else ifneq (,$(findstring armv,$(platform)))
-    ifeq (,$(findstring classic_,$(platform)))
-        override platform += unix
-    endif
+platform = unix
+ifeq ($(shell uname -a),)
+   platform = win
+else ifneq ($(findstring Darwin,$(shell uname -a)),)
+   platform = osx
+	arch = intel
+ifeq ($(shell uname -p),arm)
+	arch = arm
+endif
+ifeq ($(shell uname -p),powerpc)
+	arch = ppc
+endif
+else ifneq ($(findstring MINGW,$(shell uname -a)),)
+   platform = win
+endif
+endif
+
+# system platform
+system_platform = unix
+ifeq ($(shell uname -a),)
+EXE_EXT = .exe
+   system_platform = win
+else ifneq ($(findstring Darwin,$(shell uname -a)),)
+   system_platform = osx
+	arch = intel
+ifeq ($(shell uname -p),arm)
+	arch = ppc
+endif
+ifeq ($(shell uname -p),powerpc)
+	arch = ppc
+endif
+else ifneq ($(findstring MINGW,$(shell uname -a)),)
+   system_platform = win
 endif
 
 prefix := /usr
@@ -136,17 +155,30 @@ else ifeq ($(platform), osx)
    TARGET := $(TARGET_NAME)_libretro.dylib
    fpic := -fPIC
    SHARED := -dynamiclib -framework OpenGL
+
+ifeq ($(UNIVERSAL),1)
+ifeq ($(ARCHFLAGS),)
+   ARCHFLAGS = -arch i386 -arch x86_64
+ifeq ($(archs),arm)
+   ARCHFLAGS = -arch arm64
+endif
+ifeq ($(archs),ppc)
+   ARCHFLAGS = -arch ppc -arch ppc64
+endif
+endif
+endif
+
 ifeq ($(CROSS_COMPILE),1)
    ARCHFLAGS   = -arch $(ARCH) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 else
-   ifneq ($(shell uname -m),arm64)
+   ifeq ($(archs),arm)
       DESMUME_JIT = 1
    endif
 endif
 ifeq ($(OSX_LT_MAVERICKS),"YES")
    fpic += -mmacosx-version-min=10.2
 else
-	fpic += -mmacosx-version-min=10.7 -stdlib=libc++
+   fpic += -mmacosx-version-min=10.7 -stdlib=libc++
 endif
    CFLAGS += -DAPPLE_ATOMICS
    CXXFLAGS += -DAPPLE_ATOMICS
@@ -155,7 +187,7 @@ endif
       CXXFLAGS += $(ARCHFLAGS)
       LDFLAGS += $(ARCHFLAGS)
    endif
-	DESMUME_OPENGL = 1
+   DESMUME_OPENGL = 1
 
 # iOS
 else ifneq (,$(findstring ios,$(platform)))
