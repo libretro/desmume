@@ -137,7 +137,7 @@ else ifeq ($(platform), osx)
    fpic := -fPIC
    SHARED := -dynamiclib -framework OpenGL
 ifeq ($(CROSS_COMPILE),1)
-   ARCHFLAGS   = -arch $(ARCH) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
+   ARCHFLAGS   = -arch arm64 -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 else
    ifneq ($(shell uname -m),arm64)
       DESMUME_JIT = 1
