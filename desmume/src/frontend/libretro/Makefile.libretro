@@ -89,6 +89,8 @@ ifneq (,$(findstring unix,$(platform)))
 
    # Generic ARM
    ifneq (,$(findstring armv,$(platform)))
+      ARCH = arm
+      USE_DYNAREC = 1
       DESMUME_JIT_ARM = 1
       CXXFLAGS += -DUSE_POSIX_MEMALIGN -D__RETRO_ARM__
       ifneq (,$(findstring cortexa5,$(platform)))
@@ -106,6 +108,9 @@ ifneq (,$(findstring unix,$(platform)))
          CXXFLAGS += -mfloat-abi=softfp
       else ifneq (,$(findstring hardfloat,$(platform)))
          CXXFLAGS += -mfloat-abi=hard
+      endif
+      ifneq (,$(findstring neon,$(platform)))
+        HAVE_NEON = 1
       endif
       CXXFLAGS += -DARM
    else
