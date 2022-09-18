@@ -2346,6 +2346,13 @@ bool retro_load_game(const struct retro_game_info *game)
    if (!game)
       return false;
 
+#ifndef HAVE_JIT
+   struct retro_core_option_display option_display;
+   option_display.visible = false;
+   option_display.key = "desmume_cpu_mode";
+   environ_cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_DISPLAY, &option_display);
+#endif
+
 #ifdef HAVE_OPENGL
    if (opengl_mode)
    {
@@ -2384,6 +2391,26 @@ bool retro_load_game(const struct retro_game_info *game)
            GPU->SetColorFormat(NDSColorFormat_BGR555_Rev);
        }
    }
+   else
+   {
+       struct retro_core_option_display option_display;
+	   option_display.visible = false;
+
+       option_display.key = "desmume_color_depth";
+       environ_cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_DISPLAY, &option_display);
+       option_display.key = "desmume_gfx_multisampling";
+       environ_cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_DISPLAY, &option_display);
+       option_display.key = "desmume_gfx_texture_smoothing";
+       environ_cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_DISPLAY, &option_display);
+       option_display.key = "desmume_opengl_shadow_polygon";
+       environ_cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_DISPLAY, &option_display);
+       option_display.key = "desmume_opengl_special_zero_alpha";
+       environ_cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_DISPLAY, &option_display);
+       option_display.key = "desmume_opengl_nds_depth_calculation";
+       environ_cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_DISPLAY, &option_display);
+       option_display.key = "desmume_opengl_depth_lequal_polygon_facing";
+       environ_cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_DISPLAY, &option_display);
+   }  
 #endif
 
 struct retro_input_descriptor desc[] = {

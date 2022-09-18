@@ -150,7 +150,6 @@ struct retro_core_option_v2_definition option_defs_us[] = {
         },
         "1"
     },
-#ifdef HAVE_JIT
     {
         "desmume_cpu_mode",
 #if defined(IOS) || defined(ANDROID)
@@ -164,11 +163,14 @@ struct retro_core_option_v2_definition option_defs_us[] = {
         "system",
         {
             { "interpreter",  NULL },
+#ifdef HAVE_JIT
             { "jit",   NULL },
+#endif
             { NULL, NULL },
         },
         "interpreter"
     },
+#ifdef HAVE_JIT
     {
         "desmume_jit_block_size",
         "JIT Block Size",
