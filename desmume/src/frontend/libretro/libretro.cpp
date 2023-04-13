@@ -520,7 +520,7 @@ void retro_get_system_info(struct retro_system_info *info)
 #else
    info->library_version = "SVN";
 #endif
-   info->valid_extensions = "nds|bin";
+   info->valid_extensions = "nds|ids|bin";
    info->need_fullpath = true;
    info->block_extract = false;
 }
