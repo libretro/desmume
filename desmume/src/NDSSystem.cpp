@@ -696,13 +696,15 @@ int NDS_LoadROM(const char *filename, const char *physicalName, const char *logi
 	gameInfo.populate();
 	
 	//run crc over the whole buffer (chunk at a time, to avoid coding a streaming crc
-	gameInfo.reader->Seek(gameInfo.fROM, 0, SEEK_SET);
-	gameInfo.crc = 0;
-	for(;;) {
-		u8 buf[4096];
-		int read = gameInfo.reader->Read(gameInfo.fROM,buf,4096);
-		if(read == 0) break;
-		gameInfo.crc = crc32(gameInfo.crc, buf, read);
+	if (advsc.hasDatabase()) {
+		gameInfo.reader->Seek(gameInfo.fROM, 0, SEEK_SET);
+		gameInfo.crc = 0;
+		for(;;) {
+			u8 buf[4096];
+			int read = gameInfo.reader->Read(gameInfo.fROM,buf,4096);
+			if(read == 0) break;
+			gameInfo.crc = crc32(gameInfo.crc, buf, read);
+		}
 	}
 
 	gameInfo.chipID  = 0xC2;														// The Manufacturer ID is defined by JEDEC (C2h = Macronix)
