@@ -626,6 +626,9 @@ static int rom_init_path(const char *filename, const char *physicalName, const c
 	u32	type = ROM_NDS;
 
 	path.init(logicalFilename? logicalFilename : filename);
+#ifdef __LIBRETRO__
+	path.ReadPathSettings();
+#endif
 
 	if (!strcasecmp(path.extension().c_str(),"zip")
 		|| !strcasecmp(path.extension().c_str(),"gz")) {
