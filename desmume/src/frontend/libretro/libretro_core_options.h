@@ -465,7 +465,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
         "desmume_gfx_highres_interpolate_color",
         "Soft3D: High-res Color Interpolation",
         NULL,
-        "Enables High-res Color Inperpolation.",
+        "Enables High-res Color Interpolation.",
         NULL,
         "video",
         {
