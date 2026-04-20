@@ -75,10 +75,17 @@ ifneq (,$(findstring unix,$(platform)))
          CXX = g++-x86
       endif
    else
-      LIBS := -lpthread -lGL -lpcap
-      CXXFLAGS += -DHAVE_OPENGL -std=gnu++11
-      DESMUME_OPENGL = 1
-	DESMUME_OPENGL_CORE = 1
+      ifneq (,$(findstring webos,$(CROSS_COMPILE)))
+         LIBS := -lpthread -lGLESv2 -lpcap
+         CXXFLAGS += -DHAVE_OPENGLES -std=gnu++11
+         DESMUME_JIT_ARM = 1
+         DESMUME_JIT = 0
+      else
+         LIBS := -lpthread -lGL -lpcap
+         CXXFLAGS += -DHAVE_OPENGL -std=gnu++11
+         DESMUME_OPENGL = 1
+         DESMUME_OPENGL_CORE = 1
+      endif
    endif
 
    ifneq (,$(findstring clang,$(platform)))
