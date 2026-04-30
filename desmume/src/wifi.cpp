@@ -69,7 +69,8 @@
 
 #if defined(_WIN32) && defined(__LIBRETRO__)
 #include "frontend/windows/winpcap/pcap.h"
-#elif defined(HAVE_LIBNX) || defined(__IOS__) || defined(ANDROID) || defined(GEKKO) || defined(_3DS) || defined(__EMSCRIPTEN__)
+#elif defined(HAVE_LIBNX) || defined(__IOS__) || defined(ANDROID) || defined(GEKKO) || defined(_3DS) \
+|| defined(__EMSCRIPTEN__) || defined(WEBOS)
 #define NO_PCAP
 typedef void* pcap_pkthdr;
 #else
