@@ -53,6 +53,7 @@ public:
 		memset(serial, 0, sizeof(serial));
 	}
 	void setDatabase(const char *path);
+	bool hasDatabase();
 	std::string getDatabase() const { return database_path; }
 	u32 convertDB(const char *in_filename, EMUFILE &output);
 	u8 checkDB(const char *ROMserial, u32 crc);

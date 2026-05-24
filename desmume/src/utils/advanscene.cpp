@@ -99,6 +99,18 @@ void ADVANsCEne::setDatabase(const char *path)
 	loaded = false;
 }
 
+bool ADVANsCEne::hasDatabase()
+{
+	RFILE *fp = rfopen(database_path.c_str(), "rb");
+
+	if (fp) {
+		rfclose(fp);
+		return true;
+	}
+
+	return false;
+}
+
 bool ADVANsCEne::getXMLConfig(const char *in_filename)
 {
 	TiXmlDocument	*xml = NULL;
