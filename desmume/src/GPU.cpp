@@ -7752,15 +7752,28 @@ void GPUEngineA::_RenderLine_DisplayCapture(const GPUEngineCompositorInfo &compI
 			
 			if (CAPTURELENGTH == GPU_FRAMEBUFFER_NATIVE_WIDTH)
 			{
-				u32 *dstNative32 = (u32 *)dstCustomPtr;
-				
-				if (compInfo.line.widthCustom > GPU_FRAMEBUFFER_NATIVE_WIDTH)
+				// At an internal resolution above 1x, the captured line lives in the
+				// custom (upscaled) VRAM buffer. Its element size follows OUTPUTFORMAT:
+				// 16-bit for BGR555, 32-bit otherwise. The native mirror used to be
+				// reduced as if it were always 32-bit, so 16-bit frontends (RGB565,
+				// e.g. ManicEMU on iOS) got a corrupted mirror and capture-based
+				// transitions rendered as garbage. Reduce 16-bit data directly.
+				if (OUTPUTFORMAT == NDSColorFormat_BGR555_Rev)
 				{
-					dstNative32 = (u32 *)this->_captureWorkingA32; // We're going to reuse _captureWorkingA32, since we should already be done with it by now.
-					CopyLineReduceHinted<0xFFFF, false, false, 4>(compInfo.line, dstCustomPtr, dstNative32);
+					CopyLineReduceHinted<0xFFFF, false, false, 2>(compInfo.line, dstCustomPtr, dstNative16);
 				}
-				
-				ColorspaceConvertBuffer8888To5551<false, false>(dstNative32, dstNative16, GPU_FRAMEBUFFER_NATIVE_WIDTH);
+				else
+				{
+					u32 *dstNative32 = (u32 *)dstCustomPtr;
+
+					if (compInfo.line.widthCustom > GPU_FRAMEBUFFER_NATIVE_WIDTH)
+					{
+						dstNative32 = (u32 *)this->_captureWorkingA32; // We're going to reuse _captureWorkingA32, since we should already be done with it by now.
+						CopyLineReduceHinted<0xFFFF, false, false, 4>(compInfo.line, dstCustomPtr, dstNative32);
+					}
+
+					ColorspaceConvertBuffer8888To5551<false, false>(dstNative32, dstNative16, GPU_FRAMEBUFFER_NATIVE_WIDTH);
+				}
 				needCaptureNative = false;
 			}
 		}
